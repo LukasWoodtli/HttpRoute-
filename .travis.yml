@@ -9,7 +9,7 @@ install:
 - echo ${CXX}
 - ${CXX} --version
 - ${CXX} -v
-
+## Conan setup 
 # Install conan
 - pip install conan
 # Automatic detection of your arch, compiler, etc.
