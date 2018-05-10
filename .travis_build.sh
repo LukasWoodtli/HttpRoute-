@@ -7,6 +7,6 @@ rm -rf build
 mkdir build
 cd build
 conan install ..
-cmake -G Ninja ..
-ninja -j6
-ninja test
+cmake ..
+make -j6
+make test

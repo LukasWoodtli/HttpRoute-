@@ -15,7 +15,8 @@ install:
 - ${CXX} -v
 ## Conan setup 
 # Install conan
-- sudo pip install --upgrade conan
+- if [ "$TRAVIS_OS_NAME" = "linux" ];then sudo pip install --upgrade conan;fi
+- if [ "$TRAVIS_OS_NAME" = "osx" ];then brew install conan;fi
 # Automatic detection of your arch, compiler, etc.
 - conan user
 
