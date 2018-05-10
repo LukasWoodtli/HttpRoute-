@@ -10,6 +10,12 @@ install:
 - ${CXX} --version
 - ${CXX} -v
 
+# Install conan
+- pip install conan
+# Automatic detection of your arch, compiler, etc.
+- conan user
+
+
 addons:
   apt:
     # List of whitelisted in travis packages for ubuntu-precise can be found here:
@@ -25,12 +31,6 @@ addons:
     - clang-5.0
     - valgrind
 language: cpp
-
-install:
-# Install conan
-- pip install conan
-# Automatic detection of your arch, compiler, etc.
-- conan user
 
 
 compiler:
