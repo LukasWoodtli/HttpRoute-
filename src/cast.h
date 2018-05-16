@@ -1,19 +1,36 @@
 #include <sstream>
+#include <string>
+#include <map>
+#include <memory>
+
+class castable;
+using castableSharedPtr = std::shared_ptr<castable>;
+
 
 struct castable {
-protected:
-	const std::string m_typeText;
-	castable(const std::string& typeText) : m_typeText(typeText) {}
 public:
-	virtual bool cast(const std::string& text) = 0;
-	const std::string getTypeText() const {return m_typeText;}
+	virtual bool isCastable(const std::string& text) = 0;
+
+	template<class T>
+	static void registerType(const std::string& typeName);
+	static bool isTypeCastable(const std::string& typeName, const std::string& value) {
+		const auto it = s_map.find(typeName);
+		if (it == s_map.end()) {
+			return false;
+		}
+		return it->second->isCastable(value);
+	}
+
+private:
+	static std::map<std::string, castableSharedPtr> s_map;
 };
+
+std::map<std::string, castableSharedPtr> castable::s_map;
 
 template<typename T>
 struct type_castable : castable {
-	type_castable(const std::string &typeString) : castable(typeString) {}
 
-	bool cast(const std::string& text) override {
+	bool isCastable(const std::string& text) override {
 		T var;
 		std::istringstream istream;
 		istream.str(text);
@@ -22,5 +39,12 @@ struct type_castable : castable {
 	}
 };
 
-#define MAKE_TYPE_CASTABLE(T) std::unique_ptr<castable>(new type_castable<T>(#T))
-//std::vector<std::unique_ptr<castable>>;
+
+
+template <class T>
+void castable::registerType(const std::string& typeName) {
+		s_map.insert(std::pair<std::string, castableSharedPtr>(typeName, std::make_shared<type_castable<T>>()));
+	}
+
+
+#define REGISTER_CASTABLE_TYPE(T) do {castable::registerType<T>(#T); } while (0)

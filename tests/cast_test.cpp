@@ -10,20 +10,18 @@ TEST_CASE("Cast")
 {
 	SECTION("Cast int")
 	{
-		const auto castInt = MAKE_TYPE_CASTABLE(int);
-		
+		REGISTER_CASTABLE_TYPE(int);
+		const std::string typeStr = "int";
+
 		SECTION("Cast int (successful)")
 		{
 			const std::string valueStr = "42";
-			REQUIRE(castInt->cast(valueStr));
+			REQUIRE(castable::isTypeCastable(typeStr, valueStr));
 		}
-
 		SECTION("Cast int (un-successful)")
 		{
 			const std::string valueStr = "ab";
-			REQUIRE_FALSE(castInt->cast(valueStr));
+			REQUIRE_FALSE(castable::isTypeCastable(typeStr, valueStr));
 		}
 	}
-		//std::vector<std::unique_ptr<castable>> casts;
-	//casts.emplace_back(MAKE_TYPE_CASTABLE(int));
 }
