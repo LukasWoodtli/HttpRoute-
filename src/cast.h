@@ -3,12 +3,13 @@
 #include <map>
 #include <memory>
 
-class castable;
+struct castable;
 using castableSharedPtr = std::shared_ptr<castable>;
 
 
 struct castable {
 public:
+	virtual ~castable() {}
 	virtual bool isCastable(const std::string& text) = 0;
 
 	template<class T>
